@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<movies>
+  <movie>
+    <title>а</title>
+    <director>алег</director>
+    <year>2000</year>
+    <genre>смешанный</genre>
+    <rating>10.0</rating>
+  </movie>
+</movies>

@@ -1,0 +1,26 @@
+{% extends "movies/base.html" %}
+
+{% block title %}🎬 Главная{% endblock %}
+
+{% block content %}
+<h1 class="page-title">
+    <i class="bi bi-camera-reels"></i> Импорт и экспорт фильмов
+</h1>
+
+<p class="lead mb-4">
+    Введите информацию о фильме через форму и сохраните её в JSON или XML.
+    Также можно загружать готовые файлы и просматривать их содержимое.
+</p>
+
+<div class="d-flex flex-wrap gap-3 mt-4">
+    <a href="{% url 'add_movie' %}" class="btn btn-secondary btn-lg">
+        <i class="bi bi-plus-circle"></i> Добавить фильм
+    </a>
+    <a href="{% url 'upload_file' %}" class="btn btn-secondary btn-lg">
+        <i class="bi bi-cloud-upload"></i> Загрузить файл (JSON/XML)
+    </a>
+    <a href="{% url 'list_files' %}" class="btn btn-secondary btn-lg">
+        <i class="bi bi-folder2-open"></i> Посмотреть все файлы
+    </a>
+</div>
+{% endblock %}

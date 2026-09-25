@@ -1,0 +1,43 @@
+{% extends "movies/base.html" %}
+{% block content %}
+<h2>Содержимое папки с данными</h2>
+
+{% if count == 0 %}
+    <div class="alert alert-warning">Файлов не найдено. Загрузите файл или добавьте фильм через форму.</div>
+{% else %}
+    <p>Всего файлов: <b>{{ count }}</b></p>
+
+    {% for f in files_data %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <b>{{ f.name }}</b> <span class="badge bg-secondary">{{ f.type }}</span>
+            </div>
+            <div class="card-body">
+                {% if f.error %}
+                    <div class="alert alert-danger mb-0">Ошибка: {{ f.error }}</div>
+                {% else %}
+                    <table class="table table-sm table-striped mb-0">
+                        <thead>
+                        <tr>
+                            <th>Название</th><th>Режиссёр</th>
+                            <th>Год</th><th>Жанр</th><th>Рейтинг</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for m in f.movies %}
+                            <tr>
+                                <td>{{ m.title }}</td>
+                                <td>{{ m.director }}</td>
+                                <td>{{ m.year }}</td>
+                                <td>{{ m.genre }}</td>
+                                <td>{{ m.rating }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+{% endblock %}
