@@ -8,19 +8,56 @@
 </h1>
 
 <p class="lead mb-4">
-    Введите информацию о фильме через форму и сохраните её в JSON или XML.
-    Также можно загружать готовые файлы и просматривать их содержимое.
+    Введите информацию о фильме и сохраните её в базу данных SQLite или в файл
+    формата JSON/XML. Просматривайте данные из любого источника, ищите,
+    редактируйте и удаляйте записи из базы данных.
 </p>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-database"></i> База данных</h5>
+                <p class="card-text small text-muted">
+                    Записи сохраняются в SQLite с проверкой на дубликаты.
+                    Доступен AJAX-поиск, редактирование и удаление.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-file-earmark-code"></i> Файлы JSON/XML</h5>
+                <p class="card-text small text-muted">
+                    Данные можно сохранять в файл выбранного формата,
+                    а также загружать готовые файлы на сервер.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-search"></i> Поиск и правка</h5>
+                <p class="card-text small text-muted">
+                    Ищите записи по названию, режиссёру и жанру, редактируйте
+                    и удаляйте их прямо из интерфейса.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="d-flex flex-wrap gap-3 mt-4">
     <a href="{% url 'add_movie' %}" class="btn btn-secondary btn-lg">
         <i class="bi bi-plus-circle"></i> Добавить фильм
     </a>
+    <a href="{% url 'data_view' %}" class="btn btn-secondary btn-lg">
+        <i class="bi bi-table"></i> Посмотреть данные
+    </a>
     <a href="{% url 'upload_file' %}" class="btn btn-secondary btn-lg">
         <i class="bi bi-cloud-upload"></i> Загрузить файл (JSON/XML)
-    </a>
-    <a href="{% url 'list_files' %}" class="btn btn-secondary btn-lg">
-        <i class="bi bi-folder2-open"></i> Посмотреть все файлы
     </a>
 </div>
 {% endblock %}
