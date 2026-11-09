@@ -9,7 +9,7 @@ FORMAT_CHOICES = [
 
 TARGET_CHOICES = [
     ('file', 'Файл (JSON/XML)'),
-    ('db', 'База данных SQLite'),
+    ('db', 'База данных PostgreSQL'),
 ]
 
 TEXT_WIDGET = forms.TextInput(attrs={'class': 'form-control'})

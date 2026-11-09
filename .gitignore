@@ -15,14 +15,17 @@ env/
 *.log
 db.sqlite3
 staticfiles/
+media/
 
-# Локальные переменные окружения
 .env
 
-# Редакторы
+data/
+out.txt
+mig.txt
+datadump.json
+
 .vscode/
 .idea/
 *.swp
 
-# Временные файлы
 test_out.txt

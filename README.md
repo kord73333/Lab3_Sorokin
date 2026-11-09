@@ -1,76 +1,65 @@
-# 🎬 Кинотека — хранение данных в файлах и в базе данных
+# 🎬 Кинотека — Docker + PostgreSQL
 
-Django-приложение, которое развивает предыдущий проект (хранение в JSON/XML)
-и добавляет полноценную работу с базой данных SQLite.
+Django-приложение для хранения данных о фильмах: пользователь выбирает, **куда сохранить** запись — в **PostgreSQL** или в файл **JSON/XML**.  
+Для записей в базе доступны проверка на дубликаты, AJAX-поиск, редактирование и удаление.
 
-Пользователь сам выбирает, **куда сохранить** введённые с формы данные — в файл
-(JSON или XML) или в базу данных. При сохранении в БД работает проверка на
-дубликаты. Данные можно **просматривать из любого источника** (файлы или БД),
-а для записей в базе доступны **AJAX-поиск, редактирование и удаление**.
+Проект упакован в Docker-контейнеры (Django + PostgreSQL) и использует переменные окружения для конфигурации.
 
 ---
 
 ## ✨ Возможности
 
 | Возможность | Где реализовано |
-|---|---|
-| Форма сохранения фильма с выбором источника (файл / БД) | `movies/forms.py`, `movies/views.py` (`add_movie`) |
-| Сохранение в файл JSON/XML | `movies/utils.py` (`save_movie_to_file`) |
-| Сохранение в БД с проверкой на дубликаты | `movies/services.py` (`save_movie_to_db`), `movies/models.py` (UniqueConstraint) |
-| Сообщение о найденном дубликате | `movies/views.py` (`_save_to_database`), `UniqueConstraint.violation_error_message` |
-| Выбор источника вывода данных (БД / файлы) | `movies/views.py` (`data_view`), `movies/templates/movies/data.html` |
-| AJAX-поиск по текстовым полям БД | `movie_search` + `movies/static/movies/js/movies.js` |
-| Редактирование записей БД с валидацией | `movie_edit`, `MovieEditForm` |
-| Удаление записей БД | `movie_delete` |
-| Интерфейс на Bootstrap 5 | `movies/templates/movies/base.html` |
-| Загрузка готовых JSON/XML-файлов | `upload_file` |
-
-Поиск по базе выполняется **без перезагрузки страницы** по полям текстового
-формата: `title` (название), `director` (режиссёр) и `genre` (жанр).
+|-------------|-----------------|
+| Форма с выбором хранилища (файл / PostgreSQL) | `movies/forms.py`, `movies/views.py` (`add_movie`) |
+| Сохранение в JSON/XML | `movies/utils.py` (`save_movie_to_file`) |
+| Сохранение в БД с проверкой дубликатов | `movies/services.py`, `movies/models.py` (`UniqueConstraint`) |
+| Просмотр данных из БД или файлов | `movies/views.py` (`data_view`) |
+| AJAX-поиск по названию, режиссёру, жанру | `movie_search` + `movies/static/movies/js/movies.js` |
+| Редактирование и удаление записей БД | `movie_edit`, `movie_delete` |
+| Загрузка готовых JSON/XML | `upload_file` |
+| Интерфейс Bootstrap 5 | `movies/templates/movies/base.html` |
 
 ---
 
 ## 🗂️ Структура проекта
-
-```
 Lab3/
+├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
+├── .env.example          # шаблон переменных (без секретов)
+├── .gitignore
+├── entrypoint.sh         # ожидание БД → migrate → collectstatic → runserver
 ├── manage.py
 ├── requirements.txt
-├── db.sqlite3                # база данных SQLite (создаётся миграциями)
-├── data/                     # каталог для файлов JSON/XML
-├── movie_project/            # настройки проекта
-│   ├── settings.py
+├── datadump.json         # пример дампа для миграции данных (опционально)
+├── movie_project/
+│   ├── settings.py       # PostgreSQL через env, опция USE_SQLITE
 │   ├── urls.py
 │   └── wsgi.py
-└── movies/                   # основное приложение
-    ├── models.py             # модель Movie + ограничение уникальности
-    ├── forms.py              # формы добавления и редактирования
-    ├── services.py           # работа с БД: дубликаты, поиск, сериализация
-    ├── utils.py              # чтение/запись JSON и XML
-    ├── views.py              # представления
-    ├── urls.py               # маршруты
-    ├── admin.py              # регистрация модели в админке
-    ├── tests.py              # 24 теста
-    ├── migrations/
-    ├── static/movies/js/movies.js   # AJAX-поиск и удаление
-    └── templates/movies/
-        ├── base.html
-        ├── index.html
-        ├── add_movie.html
-        ├── edit_movie.html
-        ├── data.html
-        ├── upload.html
-        └── files.html
+└── movies/
+├── models.py
+├── forms.py
+├── services.py
+├── utils.py
+├── views.py
+├── urls.py
+├── tests.py
+├── static/movies/js/movies.js
+└── templates/movies/
+
 ---
 
-## 🚀 Запуск локально
+## 🚀 Запуск через Docker (основной способ)
+
+### 1. Подготовка
 
 ```bash
-# 1. Создать и активировать виртуальное окружение
-python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # Linux / macOS
+# Клонировать репозиторий
+git clone https://github.com/kord73333/Lab3_Sorokin.git
+cd Lab3_Sorokin
 
+HEAD
 # 2. Установить зависимости
 pip install -r requirements.txt
 
@@ -136,3 +125,7 @@ python manage.py collectstatic     # сбор статики для продак
 **Редактирование и удаление.** Редактирование открывает форму, которая проверяет
 корректность значений перед сохранением. Удаление выполняется POST-запросом после
 подтверждения и защищено CSRF-токеном.
+=======
+# Создать файл окружения
+cp .env.example .env
+d00635b (5 commit)
